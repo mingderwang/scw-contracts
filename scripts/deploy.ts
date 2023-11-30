@@ -13,6 +13,7 @@ import {
   BatchedSessionRouter__factory,
   Deployer,
   Deployer__factory,
+  ERC721SessionValidationModule__factory,
   ERC20SessionValidationModule__factory,
   EcdsaOwnershipRegistryModule__factory,
   MultichainECDSAValidator__factory,
@@ -186,7 +187,8 @@ async function deployWalletFactoryContract(deployerInstance: Deployer) {
 
   stake = await entrypoint.getDepositInfo(smartAccountFactoryAddress);
   console.log("Updated Factory Stake: ", JSON.stringify(stake, null, 2));
-
+  console.log(contractOwner);
+  console.log(smartAccountFactoryOwnerAddress);
   if (contractOwner !== smartAccountFactoryOwnerAddress) {
     console.log("Transferring Ownership of SmartAccountFactory...");
     const { hash, wait } = await smartAccountFactory.transferOwnership(
@@ -328,6 +330,16 @@ async function deployErc20SessionValidationModule(deployerInstance: Deployer) {
   );
 }
 
+async function deployErc721SessionValidationModule(deployerInstance: Deployer) {
+  await deployGeneric(
+    deployerInstance,
+    DEPLOYMENT_SALTS.ERC721_SESSION_VALIDATION_MODULE,
+    `${ERC721SessionValidationModule__factory.bytecode}`,
+    "ERC721SessionValidationModule",
+    []
+  );
+}
+
 async function deploySmartContractOwnershipRegistryModule(
   deployerInstance: Deployer
 ) {
@@ -404,6 +416,7 @@ export async function mainDeploy(): Promise<Record<string, string>> {
   console.log("=========================================");
 
   const deployerInstance = await getPredeployedDeployerContractInstance();
+  /*
   await deployEntryPointContract(deployerInstance);
   console.log("=========================================");
   await deployBaseWalletImpContract(deployerInstance);
@@ -422,11 +435,15 @@ export async function mainDeploy(): Promise<Record<string, string>> {
   console.log("=========================================");
   await deployBatchedSessionRouterModule(deployerInstance);
   console.log("=========================================");
+  */
+  await deployErc721SessionValidationModule(deployerInstance);
+  console.log("=========================================");
+  /*
   await deployErc20SessionValidationModule(deployerInstance);
   console.log("=========================================");
   await deploySmartContractOwnershipRegistryModule(deployerInstance);
   console.log("=========================================");
-
+*/
   console.log(
     "Deployed Contracts: ",
     JSON.stringify(contractsDeployed, null, 2)

@@ -509,7 +509,7 @@ describe("SessionKey: SessionKey Manager Module", async () => {
       const tokenAmountToTransfer = ethers.utils.parseEther("0.834");
 
       const wrongSessionValidationModule = await (
-        await ethers.getContractFactory("ERC20SessionValidationModule")
+        await ethers.getContractFactory("ERC721SessionValidationModule")
       ).deploy();
 
       const transferUserOp = await makeEcdsaSessionKeySignedUserOp(
